@@ -41,7 +41,7 @@ const MainLayout = () => {
                 `block px-4 py-2 rounded transition-colors ${isActive ? 'bg-gray-800 text-orange-400 font-semibold' : 'hover:bg-gray-800'}`
               }
             >
-              {link.icon} {name}
+              {link.icon} {link.name}
             </NavLink>
           ))}
         </nav>
