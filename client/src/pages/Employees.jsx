@@ -55,9 +55,9 @@ const Employees = () => {
           <tbody>
             {staff.map(emp => (
               <tr key={emp._id} className="border-b last:border-0 hover:bg-gray-50">
-                <td className="p-4 font-medium">{emp.firstName} {emp.lastName}</td>
-                <td className="p-4 text-gray-600">{emp.role}</td>
-                <td className="p-4 text-gray-600">{emp.email}</td>
+                <td className="p-4 font-medium">{emp.firstName || emp.userId?.name || 'New Staff'} {emp.lastName || ''}</td>
+                <td className="p-4 text-gray-600">{emp.designation || emp.role || 'Staff'}</td>
+                <td className="p-4 text-gray-600">{emp.email || emp.userId?.email || 'N/A'}</td>
               </tr>
             ))}
             {staff.length === 0 && (

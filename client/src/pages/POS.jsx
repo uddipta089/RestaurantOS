@@ -95,7 +95,7 @@ const POS = () => {
             >
               <div className="w-full h-1/2 bg-gray-100 rounded mb-3 flex items-center justify-center text-gray-400">Image</div>
               <div>
-                <h4 className="font-semibold text-gray-800 line-clamp-2 leading-tight">{item.name}</h4>
+                <h4 className="font-semibold text-gray-800 line-clamp-2 leading-tight">{item.itemName || item.name}</h4>
                 <p className="text-orange-600 font-bold mt-1">${item.price.toFixed(2)}</p>
               </div>
             </div>
@@ -127,7 +127,7 @@ const POS = () => {
             items.map(item => (
               <div key={item.menuItem._id} className="flex justify-between items-center bg-gray-50 p-3 rounded-lg border border-gray-100">
                 <div className="flex-1">
-                  <p className="font-medium text-sm text-gray-800">{item.menuItem.name}</p>
+                  <p className="font-medium text-sm text-gray-800">{item.menuItem.itemName || item.menuItem.name}</p>
                   <p className="text-xs text-gray-500">${item.price.toFixed(2)} x {item.quantity}</p>
                 </div>
                 <div className="flex items-center space-x-3 ml-2">

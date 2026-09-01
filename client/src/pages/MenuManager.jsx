@@ -51,12 +51,12 @@ const MenuManager = () => {
           <tbody>
             {items.map(item => (
               <tr key={item._id} className="border-b last:border-0 hover:bg-gray-50">
-                <td className="p-4 font-medium">{item.name}</td>
-                <td className="p-4 text-gray-600">{item.category}</td>
+                <td className="p-4 font-medium">{item.itemName || item.name || 'Unnamed Item'}</td>
+                <td className="p-4 text-gray-600">{item.categoryId?.name || item.category || 'Mains'}</td>
                 <td className="p-4 text-gray-900">${item.price}</td>
                 <td className="p-4">
-                  <span className={`px-2 py-1 rounded-full text-xs font-bold ${item.isAvailable ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                    {item.isAvailable ? 'Active' : 'Hidden'}
+                  <span className={`px-2 py-1 rounded-full text-xs font-bold ${item.status !== 'Unavailable' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                    {item.status || 'Available'}
                   </span>
                 </td>
               </tr>
