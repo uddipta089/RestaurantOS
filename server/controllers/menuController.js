@@ -24,8 +24,14 @@ const createMenuItem = async (req, res, next) => {
 
 const getMenuItems = async (req, res, next) => {
   try {
-    const menuItems = await MenuItem.find({ isDeleted: false, status: { $ne: 'Hidden' } }).populate('categoryId');
-    res.status(200).json({ success: true, data: menuItems });
+    const menuItems = await MenuItem.find({ isDeleted: false, status: { $ne: 'Hidden' } }).lean();
+    const mapped = menuItems.map(item => ({
+      ...item,
+      name: item.itemName,
+      category: 'Mains',
+      isAvailable: item.status === 'Available'
+    }));
+    res.status(200).json({ success: true, data: mapped });
   } catch (error) {
     next(error);
   }

@@ -23,8 +23,17 @@ const createInventoryItem = async (req, res, next) => {
 
 const getInventory = async (req, res, next) => {
   try {
-    const inventory = await Inventory.find({ branchId: req.params.branchId || req.body.branchId }).populate('supplierId');
-    res.status(200).json({ success: true, data: inventory });
+    const filter = {};
+    if (req.params.branchId || req.body.branchId) {
+      filter.branchId = req.params.branchId || req.body.branchId;
+    }
+    const inventory = await Inventory.find(filter).lean();
+    const mapped = inventory.map(item => ({
+      ...item,
+      ingredient: item.itemName,
+      qty: item.currentStock
+    }));
+    res.status(200).json({ success: true, data: mapped });
   } catch (error) {
     next(error);
   }

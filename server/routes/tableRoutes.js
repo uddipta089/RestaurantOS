@@ -4,6 +4,7 @@ const tableController = require('../controllers/tableController');
 const { authenticateUser, authorizeRoles } = require('../middleware/authMiddleware');
 
 router.post('/', authenticateUser, authorizeRoles('Administrator', 'Restaurant Owner', 'Restaurant Manager'), tableController.createTable);
+router.get('/', tableController.getTables);
 router.get('/branch/:branchId', tableController.getTables); 
 router.get('/:id', authenticateUser, tableController.getTableById);
 router.put('/:id', authenticateUser, authorizeRoles('Restaurant Owner', 'Restaurant Manager', 'Administrator'), tableController.updateTable);

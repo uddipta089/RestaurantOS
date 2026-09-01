@@ -24,8 +24,15 @@ const createEmployee = async (req, res, next) => {
 
 const getEmployees = async (req, res, next) => {
   try {
-    const employees = await Employee.find({ status: { $ne: 'Inactive' } }).populate('userId');
-    res.status(200).json({ success: true, data: employees });
+    const employees = await Employee.find({ status: { $ne: 'Inactive' } }).lean();
+    const mapped = employees.map(emp => ({
+      ...emp,
+      firstName: emp.employeeCode,
+      lastName: '',
+      role: emp.designation,
+      email: 'staff@restaurant.com'
+    }));
+    res.status(200).json({ success: true, data: mapped });
   } catch (error) {
     next(error);
   }
