@@ -3,18 +3,24 @@ const OrderItem = require('../models/OrderItem');
 
 const createOrder = async (req, res, next) => {
   try {
-    const { branchId, tableId, items, ...orderData } = req.body;
+    const mongoose = require('mongoose');
+    const dummyId = new mongoose.Types.ObjectId();
+    const { branchId, tableId, items, totalAmount, ...orderData } = req.body;
     
     // First, save all order items
-    const savedItems = await Promise.all(items.map(async (item) => {
-      const orderItem = new OrderItem({ ...item, orderId: null }); // Temporarily null, will link after order creation or we create order first
-      return orderItem; // Will save properly in a transaction in a real world scenario
+    const savedItems = await Promise.all((items || []).map(async (item) => {
+      const orderItem = new OrderItem({ ...item, orderId: null });
+      return orderItem;
     }));
 
     const newOrder = new Order({
       ...orderData,
-      branchId,
+      branchId: branchId || dummyId,
       tableId,
+      orderNumber: `ORD-${Date.now()}`,
+      subtotal: totalAmount || 0,
+      tax: (totalAmount || 0) * 0.1,
+      grandTotal: (totalAmount || 0) * 1.1,
       items: []
     });
     

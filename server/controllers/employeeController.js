@@ -2,7 +2,19 @@ const Employee = require('../models/Employee');
 
 const createEmployee = async (req, res, next) => {
   try {
-    const employee = new Employee(req.body);
+    const mongoose = require('mongoose');
+    const dummyId = new mongoose.Types.ObjectId();
+    const payload = {
+      userId: dummyId,
+      branchId: dummyId,
+      employeeCode: `EMP-${Date.now()}`,
+      designation: req.body.role || 'Staff',
+      salary: 0,
+      joiningDate: new Date(),
+      shift: 'Morning Shift',
+      ...req.body
+    };
+    const employee = new Employee(payload);
     await employee.save();
     res.status(201).json({ success: true, data: employee });
   } catch (error) {

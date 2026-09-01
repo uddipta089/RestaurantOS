@@ -2,7 +2,14 @@ const Table = require('../models/Table');
 
 const createTable = async (req, res, next) => {
   try {
-    const table = new Table(req.body);
+    const mongoose = require('mongoose');
+    const dummyId = new mongoose.Types.ObjectId();
+    const payload = {
+      branchId: dummyId,
+      qrCode: `QR-${Date.now()}-${Math.floor(Math.random()*1000)}`,
+      ...req.body
+    };
+    const table = new Table(payload);
     await table.save();
     res.status(201).json({ success: true, data: table });
   } catch (error) {
@@ -12,7 +19,11 @@ const createTable = async (req, res, next) => {
 
 const getTables = async (req, res, next) => {
   try {
-    const tables = await Table.find({ branchId: req.params.branchId || req.body.branchId });
+    const filter = {};
+    if (req.params.branchId || req.body.branchId) {
+      filter.branchId = req.params.branchId || req.body.branchId;
+    }
+    const tables = await Table.find(filter);
     res.status(200).json({ success: true, data: tables });
   } catch (error) {
     next(error);

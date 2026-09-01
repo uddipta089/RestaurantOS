@@ -2,9 +2,20 @@ const Inventory = require('../models/Inventory');
 
 const createInventoryItem = async (req, res, next) => {
   try {
-    const item = new Inventory(req.body);
-    await item.save();
-    res.status(201).json({ success: true, data: item });
+    const mongoose = require('mongoose');
+    const dummyId = new mongoose.Types.ObjectId();
+    const payload = {
+      branchId: dummyId,
+      category: 'General',
+      minimumStock: 5,
+      maximumStock: 100,
+      reorderLevel: 10,
+      costPerUnit: 0,
+      ...req.body
+    };
+    const inventoryItem = new Inventory(payload);
+    await inventoryItem.save();
+    res.status(201).json({ success: true, data: inventoryItem });
   } catch (error) {
     next(error);
   }

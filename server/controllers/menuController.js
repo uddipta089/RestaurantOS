@@ -2,7 +2,19 @@ const MenuItem = require('../models/MenuItem');
 
 const createMenuItem = async (req, res, next) => {
   try {
-    const menuItem = new MenuItem(req.body);
+    const mongoose = require('mongoose');
+    const dummyId = new mongoose.Types.ObjectId();
+    const payload = {
+      restaurantId: dummyId,
+      categoryId: dummyId,
+      itemName: req.body.name || req.body.itemName || 'New Item',
+      price: req.body.price || 0,
+      costPrice: (req.body.price || 0) * 0.5,
+      foodType: 'Veg',
+      preparationTime: 15,
+      ...req.body
+    };
+    const menuItem = new MenuItem(payload);
     await menuItem.save();
     res.status(201).json({ success: true, data: menuItem });
   } catch (error) {
