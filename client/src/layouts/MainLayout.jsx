@@ -1,5 +1,5 @@
 import React from 'react';
-import { Outlet, Link, useNavigate } from 'react-router-dom';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../redux/slices/authSlice';
 
@@ -13,6 +13,17 @@ const MainLayout = () => {
     navigate('/login');
   };
 
+  const navLinks = [
+    { path: '/dashboard', name: 'Dashboard', icon: '📊' },
+    { path: '/pos', name: 'Point of Sale', icon: '💳' },
+    { path: '/kds', name: 'Kitchen (KDS)', icon: '👨‍🍳' },
+    { path: '/tables', name: 'Tables', icon: '🪑' },
+    { path: '/menu', name: 'Menu', icon: '🍔' },
+    { path: '/inventory', name: 'Inventory', icon: '📦' },
+    { path: '/employees', name: 'Staff (HR)', icon: '👥' },
+    { path: '/customers', name: 'CRM', icon: '💎' }
+  ];
+
   return (
     <div className="flex h-screen bg-gray-50">
       {/* Sidebar */}
@@ -22,14 +33,17 @@ const MainLayout = () => {
         </div>
         
         <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
-          <Link to="/dashboard" className="block px-4 py-2 rounded hover:bg-gray-800 transition-colors">📊 Dashboard</Link>
-          <Link to="/pos" className="block px-4 py-2 rounded hover:bg-gray-800 transition-colors text-orange-400 font-semibold">💳 Point of Sale</Link>
-          <Link to="/kds" className="block px-4 py-2 rounded hover:bg-gray-800 transition-colors">👨‍🍳 Kitchen (KDS)</Link>
-          <Link to="/tables" className="block px-4 py-2 rounded hover:bg-gray-800 transition-colors">🪑 Tables</Link>
-          <Link to="/menu" className="block px-4 py-2 rounded hover:bg-gray-800 transition-colors">🍔 Menu</Link>
-          <Link to="/inventory" className="block px-4 py-2 rounded hover:bg-gray-800 transition-colors">📦 Inventory</Link>
-          <Link to="/employees" className="block px-4 py-2 rounded hover:bg-gray-800 transition-colors">👥 Staff (HR)</Link>
-          <Link to="/customers" className="block px-4 py-2 rounded hover:bg-gray-800 transition-colors">💎 CRM</Link>
+          {navLinks.map((link) => (
+            <NavLink 
+              key={link.path}
+              to={link.path} 
+              className={({ isActive }) => 
+                `block px-4 py-2 rounded transition-colors ${isActive ? 'bg-gray-800 text-orange-400 font-semibold' : 'hover:bg-gray-800'}`
+              }
+            >
+              {link.icon} {name}
+            </NavLink>
+          ))}
         </nav>
 
         <div className="p-4 border-t border-gray-800">
@@ -39,7 +53,7 @@ const MainLayout = () => {
           </div>
           <button 
             onClick={handleLogout}
-            className="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded transition-colors"
+            className="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded transition-colors font-semibold"
           >
             Logout
           </button>
@@ -58,13 +72,13 @@ const MainLayout = () => {
               </svg>
             </button>
             <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
-              U
+              {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
             </div>
           </div>
         </header>
         
         {/* Dynamic Page Content */}
-        <div className="flex-1 overflow-auto p-6">
+        <div className="flex-1 overflow-auto bg-gray-50">
           <Outlet />
         </div>
       </main>
