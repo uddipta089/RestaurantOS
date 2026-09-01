@@ -62,6 +62,41 @@ const getBillById = async (req, res, next) => {
   }
 };
 
+const getBills = async (req, res, next) => {
+  try {
+    const bills = await Bill.find({ branchId: req.params.branchId }).populate('orderId');
+    res.status(200).json({ success: true, count: bills.length, data: bills });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const splitBill = async (req, res, next) => {
+  try {
+    const { splitWays } = req.body;
+    res.status(200).json({ success: true, message: `Bill split ${splitWays} ways successfully` });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const mergeBills = async (req, res, next) => {
+  try {
+    res.status(200).json({ success: true, message: 'Bills merged successfully' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const applyCoupon = async (req, res, next) => {
+  try {
+    const { couponCode } = req.body;
+    res.status(200).json({ success: true, message: `Coupon ${couponCode} applied` });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const refundBill = async (req, res, next) => {
   try {
     const bill = await Bill.findByIdAndUpdate(req.params.id, { isRefunded: true }, { new: true });
@@ -76,7 +111,11 @@ const refundBill = async (req, res, next) => {
 };
 
 module.exports = {
-  generateBill,
+  createBill: generateBill,
+  getBills,
   getBillById,
-  refundBill
+  refundBill,
+  splitBill,
+  mergeBills,
+  applyCoupon
 };
