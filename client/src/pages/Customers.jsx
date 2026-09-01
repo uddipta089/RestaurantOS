@@ -3,14 +3,30 @@ import React from 'react';
 const Customers = () => {
   const customers = [
     { id: 1, name: 'Bruce Wayne', visits: 45, spent: 4500, tier: 'VIP' },
-    { id: 2, name: 'Clark Kent', visits: 4, spent: 120, tier: 'Regular' }
+    { id: 2, name: 'Clark Kent', visits: 4, spent: 120, tier: 'Regular' },
+    { id: 3, name: 'Diana Prince', visits: 12, spent: 850, tier: 'Regular' },
+    { id: 4, name: 'Tony Stark', visits: 89, spent: 12400, tier: 'VIP' }
   ];
 
+  const exportCSV = () => {
+    const headers = ['ID,Name,Total Visits,Total Spent,Tier'];
+    const rows = customers.map(c => `${c.id},${c.name},${c.visits},${c.spent},${c.tier}`);
+    const csvContent = "data:text/csv;charset=utf-8," + headers.concat(rows).join("\n");
+    const encodedUri = encodeURI(csvContent);
+    
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "restaurant_customers.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
-    <div className="p-6">
+    <div className="p-6 pt-0">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Customer CRM</h1>
-        <button className="bg-orange-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-orange-700">Export CSV</button>
+        <button onClick={exportCSV} className="bg-orange-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-orange-700">Export CSV</button>
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
